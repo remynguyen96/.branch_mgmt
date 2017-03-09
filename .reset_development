@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "Just a moments. it's take 3 seconds :)"
+cd ..
+git fetch origin -p
+git checkout development
+git reset --hard origin/development
+git pull
+echo "Ok fine, good boy ^,....,^ !!!"

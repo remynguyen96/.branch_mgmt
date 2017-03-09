@@ -1,0 +1,64 @@
+#!/bin/bash
+if [ -z $1 ]; then
+        echo
+        echo "Cach su dung script:"
+        echo "    ./.development_merge u/<ten_dev>/<task_number>"
+        echo
+        exit 1;
+fi
+
+function error_check {
+        if [ $? -ne 0 ]; then
+                echo
+                echo "Co loi voi $err_txt. Thoat...."
+                exit $?;
+        fi
+}
+
+cd ..
+git fetch origin -p
+err_txt="checkout development"
+error_check
+
+git reset --hard origin/development
+err_txt="reset hard on development"
+error_check
+
+git checkout $1
+err_txt="checkout $1"
+error_check
+
+git reset --hard origin/$1
+error_txt="reset hard on $1"
+error_check
+
+commits="$(git rev-list development..HEAD | wc -l)"
+if [ $commits -ne 1 ]; then
+        echo
+        echo "Co tong cong $commits commit tren branch $1, can phai gom thanh 1 commit duy nhat. Neu can merge commit rieng biet, vui long tu merge vi tool nay khong ho tro..."
+        exit -1;
+fi
+
+git rebase development
+err_txt="rebase voi nhanh development"
+error_check
+
+git checkout development
+err_txt="checkout development de merge voi $1"
+error_check
+
+echo
+echo "MERGE $1 vo nhanh development"
+git merge $1
+err_txt="merge $1 vo nhanh development"
+error_check
+
+echo
+echo "PUSH development sau khi merge voi $1"
+git push
+err_txt="push development sau khi merge voi $1"
+error_check
+
+git checkout development
+echo
+echo "Merge finished. Good bye my love, see you again ^,....,^"
