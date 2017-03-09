@@ -6,4 +6,4 @@ git fetch origin -p
 git checkout development
 git reset --hard origin/development
 git pull
-echo "Ok fine, good boy ^,....,^ !!!"
+echo "Ok fine, good boy ^,....,^ make by Remy Nguyen!!!"
